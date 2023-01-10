@@ -48,15 +48,7 @@ class ShopIntegration extends Base {
 	 * @param int $order_id WooCommerce Order ID
 	 * @since 1.0.0
 	 *
-	 * ShopAddTransaction (POST)
-		w body:
-		{
-		"UserName": "mb123@gazeta.pl", // Email
-		"ExtTransactionId": 2,  // int – identyfikator transakcji ze sklepu
-		"Date": "2022-12-22 16:55",
-		"ProductId": 3, // int – identyfikator produktu
-		"ProductName": "Ala" // string – nazwa produktu
-		}
+	 *
 	 */
 	public function sendOrder( int $order_id ): void {
 

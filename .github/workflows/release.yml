@@ -2,9 +2,8 @@ name: Generate Installable Plugin, and Upload as Release Asset
 
 on:
   push:
-    # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - "v*.*.*"
 
 jobs:
   build:
@@ -20,29 +19,14 @@ jobs:
       - name: Create artifact
         uses: montudor/action-zip@v1
         with:
-          args: zip -X -r ./build/f4f-shop-integration.zip . -x *.git* .* "*/\.*" CODE_OF_CONDUCT.md CONTRIBUTING.md ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md *.dist composer.* build** *.dist.*
+          args: zip -X -r build/f4f-shop-integration.zip . -x *.git* .* "*/\.*" CODE_OF_CONDUCT.md CONTRIBUTING.md ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md *.dist composer.* build** *.dist.*
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
             name: F4f Shop Integration
-            path: ./build/f4f-shop-integration.zip
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            path: build/f4f-shop-integration.zip
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./build/f4f-shop-integration.zip
-          asset_name: f4f-shop-integration.zip
-          asset_content_type: application/zip
+          files: ./build/f4f-shop-integration.zip
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}

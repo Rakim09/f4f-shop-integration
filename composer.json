@@ -1,0 +1,46 @@
+{
+    "name": "rdev/f4f-shop-integration",
+    "description": "F4F Shop Integration",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "homepage": "https://wp-strap.com",
+    "autoload": {
+        "psr-4": {
+            "F4fShopIntegration\\": "src/"
+        }
+    },
+    "scripts": {
+        "phpcs": "./vendor/bin/phpcs"
+    },
+    "require": {
+        "php": ">=7.1",
+        "micropackage/requirements": "^1.0"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "wp-coding-standards/wpcs": "*",
+        "automattic/phpcs-neutron-ruleset": "^3.3",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "symfony/var-dumper": "^6.2"
+    },
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "boilerplate",
+        "framework"
+    ],
+    "authors": [
+        {
+            "name": "R-DEV",
+            "email": "office@r-dev.cloud",
+            "homepage": "https://r-dev.cloud"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

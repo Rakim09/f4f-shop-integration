@@ -1,0 +1,32 @@
+name: Generate Installable Plugin, and Upload as Release Asset
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Upload Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build project
+        run: |
+          composer install --no-dev --optimize-autoloader
+          mkdir build
+      - name: Create artifact
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -X -r build/custom-auth-via-api.zip . -x *.git* .* "*/\.*" CODE_OF_CONDUCT.md CONTRIBUTING.md ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md *.dist composer.* build** tests** *.dist.*
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+            name: F4f Shop Integration
+            path: build/f4f-shop-integration.zip
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: build/custom-auth-via-api.zip application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

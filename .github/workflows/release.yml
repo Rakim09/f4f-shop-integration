@@ -30,3 +30,6 @@ jobs:
         with:
           files: ./build/f4f-shop-integration.zip
           token: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: write

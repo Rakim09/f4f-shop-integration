@@ -18,15 +18,15 @@ jobs:
       - name: Create artifact
         uses: montudor/action-zip@v1
         with:
-          args: zip -X -r build/f4f-shop-integration.zip . -x *.git* .* "*/\.*" CODE_OF_CONDUCT.md CONTRIBUTING.md ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md *.dist composer.* build** tests** *.dist.*
+          args: zip -X -r ./f4f-shop-integration.zip . -x *.git* .* "*/\.*" CODE_OF_CONDUCT.md CONTRIBUTING.md ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md *.dist composer.* build** *.dist.*
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
             name: F4f Shop Integration
-            path: build/f4f-shop-integration.zip
+            path: ./f4f-shop-integration.zip
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: build/f4f-shop-integration.zip
+          args: ./f4f-shop-integration.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

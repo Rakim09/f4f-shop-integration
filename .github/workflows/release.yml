@@ -29,4 +29,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: ./build/f4f-shop-integration.zip
-          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}

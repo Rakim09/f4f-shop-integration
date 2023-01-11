@@ -40,15 +40,18 @@ class ShopIntegration extends Base {
 		if (get_option( 'rd_f4f_shop_integration_add_transaction' ) && get_option( 'rd_f4f_shop_integration_product_category_id' )) {
 			add_action( 'woocommerce_payment_complete', [ $this, 'sendOrder' ] );
 		}
+
+		if (get_option( 'rd_f4f_shop_integration_cancel_transaction' ) && get_option( 'rd_f4f_shop_integration_product_category_id' )) {
+			add_action( 'woocommerce_order_status_cancelled', [ $this, 'cancelOrder' ] );
+			add_action( 'woocommerce_order_status_refunded', [ $this, 'cancelOrder' ] );
+		}
 	}
 
 	/**
 	 * Checkout order hook for sending order data
 	 *
 	 * @param int $order_id WooCommerce Order ID
-	 * @since 1.0.0
-	 *
-	 *
+	 * @return void
 	 */
 	public function sendOrder( int $order_id ): void {
 
@@ -82,10 +85,29 @@ class ShopIntegration extends Base {
 
 				$response = wp_remote_post( get_option( 'rd_f4f_shop_integration_add_transaction' ), $args );
 
-				$order->update_meta_data( 'args', $args );
-				$order->update_meta_data( 'response', $response );
+				$order->update_meta_data( 'order_send', true );
+				$order->update_meta_data( 'response_save_order', $response );
 				$order->save_meta_data();
 			}
+		}
+	}
+
+	/**
+	 * Cancel order
+	 *
+	 * @param int $order_id
+	 * @return void
+	 */
+	public function cancelOrder( int $order_id ): void {
+		/** @var WC_Order $order */
+		$order = wc_get_order( $order_id );
+
+		$order_send = $order->get_meta('order_send');
+		if ($order_send) {
+			$url = str_replace('ExtTransactionId', (string)$order_id, get_option( 'rd_f4f_shop_integration_cancel_transaction' ));
+			$response = wp_remote_post( $url );
+			$order->update_meta_data( 'response_cancel_order', $response );
+			$order->save_meta_data();
 		}
 	}
 }

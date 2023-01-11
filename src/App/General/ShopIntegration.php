@@ -39,6 +39,8 @@ class ShopIntegration extends Base {
 		 */
 		if (get_option( 'rd_f4f_shop_integration_add_transaction' ) && get_option( 'rd_f4f_shop_integration_product_category_id' )) {
 			add_action( 'woocommerce_payment_complete', [ $this, 'sendOrder' ] );
+			add_action( 'woocommerce_order_status_pending_to_processing', [ $this, 'sendOrder' ] );
+			add_action( 'woocommerce_order_status_pending_to_completed', [ $this, 'sendOrder' ] );
 		}
 
 		if (get_option( 'rd_f4f_shop_integration_cancel_transaction' ) && get_option( 'rd_f4f_shop_integration_product_category_id' )) {
@@ -54,7 +56,6 @@ class ShopIntegration extends Base {
 	 * @return void
 	 */
 	public function sendOrder( int $order_id ): void {
-
 		/** @var WC_Order $order */
 		$order = wc_get_order( $order_id );
 

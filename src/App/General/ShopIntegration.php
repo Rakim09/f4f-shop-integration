@@ -60,7 +60,7 @@ class ShopIntegration extends Base {
 		$order = wc_get_order( $order_id );
 
 		/** @var WP_User $current_user */
-		$current_user = wp_get_current_user();
+		$user = get_user_by('ID', $order->get_user_id());
 
 		/**
 		 * @var WC_Order_Item_Product $item
@@ -76,7 +76,7 @@ class ShopIntegration extends Base {
 						'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8',
 					],
 					'body'    => [
-						'UserName' => $current_user->user_email,
+						'UserName' => $user->user_email,
 						'ExtTransactionId'   => $order_id,
 						'Date'   => $date->date('Y-m-d H:i'),
 						'ProductId'   => $item->get_product_id(),
@@ -88,6 +88,7 @@ class ShopIntegration extends Base {
 
 				$order->update_meta_data( 'order_send', true );
 				$order->update_meta_data( 'response_save_order', $response );
+				$order->update_meta_data( 'args', $args );
 				$order->save_meta_data();
 			}
 		}
